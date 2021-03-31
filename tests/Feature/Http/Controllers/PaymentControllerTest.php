@@ -51,7 +51,9 @@ class PaymentControllerTest extends TestCase
         Queue::fake();
         Queue::assertNothingPushed();
 
-        $this->post(route('paymentsdelete'), []);
+        $this->post(route('paymentsdelete'), [
+            "data" => [1, 2]
+        ]);
         // Assert job dilakukan sekali...
         Queue::assertPushed(DeletePayments::class, 1);
     }
@@ -61,7 +63,9 @@ class PaymentControllerTest extends TestCase
         Queue::fake();
         Queue::assertNothingPushed();
 
-        $this->post(route('paymentsdelete'), []);
+        $this->post(route('paymentsdelete'), [
+            "data" => [1, 2]
+        ]);
         // Assert a memastikan queue terkirim ke channel delete-payment-queue...
         Queue::assertPushedOn('delete-payment-queue', DeletePayments::class);
     }

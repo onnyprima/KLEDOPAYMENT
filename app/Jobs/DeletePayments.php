@@ -33,7 +33,7 @@ class DeletePayments implements ShouldQueue
     {
         foreach ($this->data as $key => $value) {
             $result = DB::table('payments')->where('id', '=', $value)->delete();
-            event(new \App\Events\DeletePayment($result));
+            event(new \App\Events\DeletePayment($value));
         }
     }
 }

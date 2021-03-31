@@ -38,17 +38,34 @@
                 <th>Payment Name</th>
                 <th width="280px"class="text-center">Delete</th>
             </tr>
-            <?php $i = 0 ?>
+            <?php 
+            $i = 0; 
+            $ids = [];
+            ?>
             @foreach ($data as $post)
+            <?php 
+              array_push($ids, $post->id); 
+            ?>
             <tr>
                 <td class="text-center">{{ ++$i }}</td>
-                <td>{{ $post->payment_name }}</td>
+                <td id={{'row_'.$post->id}}>{{ $post->payment_name }}</td>
                 <td class="text-center">
-                    <input type="checkbox" class="form-check-input" value={{$post->id}}>
+                    <input class="chk" type="checkbox" checked class="form-check-input" value={{$post->id}}>
                 </td>
             </tr>
             @endforeach
         </table>
+        <div class="row">
+          <div class="col"></div>
+          <div class="col"></div>
+          <div class="col"></div>
+          <div class="col"></div>
+          <div class="col"></div>
+          <div class="col">
+            <button id="delete" class="btn btn-danger">Delete</button>
+          </div>
+        </div>
+        
         <div id="infodelete"></div>
 
         <a href="#notifications-panel" class="dropdown-toggle" data-toggle="dropdown">
@@ -69,7 +86,8 @@
 
             channel.bind('event-delete', function(data) {
                 console.log(data); 
-                $( "#infodelete" ).append( "<div>"+data.message+"</div>" );
+                $( "#infodelete" ).text(data.message);
+                $("#row_" + data.id).css('background-color', 'red');
             });
 
             var callback = function(eventName, data) {
@@ -77,6 +95,27 @@
             };
             //bind to all events on the connection
             pusher.bind_global(callback);
+
+            $('.chk').on('click', function(e){
+              e.preventDefault();
+            })
+
+            $('#delete').on('click', function(){
+              var jqueryarray = <?php echo json_encode($ids); ?>;
+              console.log(jqueryarray);
+              $( "#infodelete" ).text('Processing...');
+              $.ajax({
+                  type:'POST',
+                  url:'/payments/delete',
+                  data: {data: jqueryarray}, 
+                  success:function(data){
+                      alert('Data dalam proses hapus.');
+                  },
+                  error: function(e){
+                      console.log(e)
+                  }
+              });
+            })
           </script>
     </body>
 

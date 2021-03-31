@@ -30,8 +30,8 @@ class PaymentController extends Controller
 
     public function delete(Request $request)
     {
-        $data = [1, 3, 4, 5, 6, 7];//$request->all();
-        DeletePayments::dispatch($data)->onQueue('delete-payment-queue');
+        $data = $request->all();
+        DeletePayments::dispatch($data['data'])->onQueue('delete-payment-queue');
         return "Event has been sent!";
     }
 
