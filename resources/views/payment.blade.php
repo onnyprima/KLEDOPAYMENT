@@ -22,13 +22,23 @@
                     </div>
                   @endif
 
+                  @if ($errors->any())
+    <div class="alert alert-danger">
+        <strong>Whoops!</strong> There were some problems with your input.<br><br>
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
           <table class="table table-bordered">
             <tr>
                 <th width="20px" class="text-center">No</th>
                 <th>Payment Name</th>
                 <th width="280px"class="text-center">Delete</th>
             </tr>
-            {{$i = 0}}
+            <?php $i = 0 ?>
             @foreach ($data as $post)
             <tr>
                 <td class="text-center">{{ ++$i }}</td>

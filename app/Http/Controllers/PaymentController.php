@@ -16,6 +16,7 @@ class PaymentController extends Controller
     {
         $validated = $paymentRequest->validated();
         Payment::create($validated);
+
         return redirect()->route('payments')
         ->with('success','Post created successfully.');;
     }
@@ -30,7 +31,7 @@ class PaymentController extends Controller
     public function delete(Request $request)
     {
         $data = [1, 3, 4, 5, 6, 7];//$request->all();
-        DeletePayments::dispatch($data);
+        DeletePayments::dispatch($data)->onQueue('delete-payment-queue');
         return "Event has been sent!";
     }
 
